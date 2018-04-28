@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "75377899-5854-4f21-a866-512940344a79",
+		"name": "Right",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "To add",
+			"description": "",
+			"item": [
+				{
+					"name": "Adding landlords from data file",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c13b81a2-40b2-4cdc-9685-867b35047b78",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "84e269ec-58cb-4d55-b93f-4c07e7a5091b",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"",
+									" //console.log(\"From data file\" + data.firstname);",
+									" ",
+									"pm.test(\"Response body is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"  pm.expect(jsonData.firstName).to.equal(data.firstname);",
+									"  pm.expect(jsonData.lastName).to.equal(data.lastname);",
+									"// pm.expect(jsonData.trusted).to.equal(data.trusted);",
+									"   //   console.log(jsonData.trusted);",
+									"    //  console.log(data.trusted);",
+									"});",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"{{firstname}}\",\r\n  \"lastName\": \"{{lastname}}\",\r\n  \"trusted\": \"{{trusted}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						},
+						"description": "Add landlords "
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete",
+			"description": "",
+			"item": [
+				{
+					"name": "Delete all records under tests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6cfc2ba7-f502-4101-a335-50f76917c26a",
+								"type": "text/javascript",
+								"exec": [
+									"{",
+									"    var jsondata = JSON.parse(responseBody);",
+									"    var list=jsondata.length;",
+									"",
+									"//console.log(list);",
+									"for(var i=0;i<list;i++)",
+									"{",
+									"pm.environment.set(\"idto\",jsondata[i].id);",
+									"//var idto=jsondata[0].id",
+									"//console.log(idto)",
+									"",
+									"pm.sendRequest({url:'http://localhost:8080/landlords/'+pm.environment.get('idto'),",
+									"    method:'DELETE',",
+									"    header:'Content-type:application/json',",
+									"    body:{}},function (err, res)",
+									"        {   ",
+									"           });",
+									"",
+									"    ",
+									"}",
+									"}",
+									"",
+									"postman.setNextRequest('getRecords');",
+									"",
+									"/*{",
+									"pm.sendRequest({url:'http://localhost:8080/landlords',method:'GET',header:'Content-type:application/json',body:{}}, function (err, response)",
+									"{",
+									"    var js=JSON.parse(responseBody);",
+									"    var lng=js.length;",
+									"   console.log(js.length);",
+									"   ",
+									"   /*pm.test(\"Deleted all records\", function () {",
+									"       ",
+									"   // var jsonData = pm.response.json();*/",
+									"   ",
+									"   // pm.expect(lng).to.eql(0);",
+									"    ",
+									"    ",
+									"/*});",
+									"}*/",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "52df5e20-fedf-4942-8b06-c68d298a4ad1",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"",
+									"/*pm.sendRequest(\"POST\", function (err, response) {",
+									"    console.log(response.json());",
+									"});*/"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						},
+						"description": "Get all records"
+					},
+					"response": []
+				},
+				{
+					"name": "post",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\":\"new\",\n     \"lastName\":\"new2\",\n\t\"trusted\":false\n}"
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getRecords",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7289ebf5-4c29-486b-9bfc-9a819d8edeeb",
+								"type": "text/javascript",
+								"exec": [
+									"var body =JSON.parse(responseBody);",
+									"var rec = body.length;",
+									"console.log(rec);",
+									"",
+									"",
+									"pm.test(\"checking the availability\", function () {",
+									"    pm.expect(rec).to.equal(0);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
